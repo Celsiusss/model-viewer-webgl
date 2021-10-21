@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "module": "es2020",
+        "lib": ["ESNext", "dom"],
+        "moduleResolution": "Node",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "preserveConstEnums": true,
+        "outDir": "build/",
+        "strict": true
+    },
+    "include": ["src/lib/**/*"],
+    "exclude": ["node_modules"]
+}
