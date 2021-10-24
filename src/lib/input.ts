@@ -1,28 +1,39 @@
-import { mat4 } from 'gl-matrix';
-
 export enum InputKey {
     W, A, S, D,
-    MOUSE0,
+    Q, E,
+    MOUSE0, MOUSE1,
+    WHEEL_UP, WHEEL_DOWN,
     NONE
 }
 
 export class InputHandler {
     keysPressed: InputKey[] = [];
 
-    public mouse = {
+    readonly mouse = {
         deltaX: 0,
         deltaY: 0
     }
 
-    constructor() {
+    constructor(private canvas: HTMLCanvasElement) {
         document.addEventListener('keydown', event => this.addKey(event.key));
         document.addEventListener('keyup', event => this.removeKey(event.key));
-        document.addEventListener('mousedown', event => this.addKey('mouse0'));
-        document.addEventListener('mouseup', event => this.removeKey('mouse0'));
+        canvas.addEventListener('mousedown', event => this.addKey(`mouse${event.button}`));
+        document.addEventListener('mouseup', event => this.removeKey(`mouse${event.button}`));
+        document.addEventListener('wheel', event => {
+            if (event.deltaY > 0) {
+                this.addKey('wheeldown');
+            } else if (event.deltaY < 0) {
+                this.addKey('wheelup');
+            }
+        });
 
         document.addEventListener('mousemove', event => {
             this.mouse.deltaX = event.movementX;
             this.mouse.deltaY = event.movementY;
+        });
+
+        canvas.addEventListener('contextmenu', event => {
+            event.preventDefault();
         });
     }
 
@@ -32,10 +43,17 @@ export class InputHandler {
         }
     }
 
+    public resetMouse() {
+        this.mouse.deltaX = 0;
+        this.mouse.deltaY = 0;
+        this.removeKey('wheelup');
+        this.removeKey('wheeldown');
+    }
+
     private addKey(key: string) {
         const inputKey = this.matchEnum(key.toLowerCase());
         const index = this.keysPressed.findIndex(value => value === inputKey);
-        if (index < 0) {
+        if (inputKey !== InputKey.NONE && index < 0) {
             this.keysPressed.push(inputKey);
         }
     }
@@ -55,6 +73,18 @@ export class InputHandler {
                 return InputKey.S;
             case 'd':
                 return InputKey.D;
+            case 'q':
+                return InputKey.Q;
+            case 'e':
+                return InputKey.E;
+            case 'mouse0':
+                return InputKey.MOUSE0;
+            case 'mouse1':
+                return InputKey.MOUSE1;
+            case 'wheelup':
+                return InputKey.WHEEL_UP;
+            case 'wheeldown':
+                return InputKey.WHEEL_DOWN;
             default:
                 return InputKey.NONE;
         }

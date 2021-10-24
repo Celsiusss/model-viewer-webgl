@@ -3,20 +3,21 @@
 
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
-  mount: {
-    'src/lib': '/js',
-    src: '/',
-    'src/shaders': { url: '/shaders', static: true }
-  },
-  plugins: [
-    '@snowpack/plugin-typescript'
-  ],
-  packageOptions: { },
-  devOptions: {
-    open: 'none',
-    output: 'stream'
-  },
-  buildOptions: {
-    sourcemap: true
-  },
+    mount: {
+        'src/lib': '/js',
+        'src': '/',
+        'src/shaders': { url: '/shaders', static: true },
+        'models': '/models'
+    },
+    plugins: [
+        '@snowpack/plugin-typescript'
+    ],
+    packageOptions: { },
+    devOptions: {
+        open: 'none',
+        output: 'stream'
+    },
+    buildOptions: {
+        sourcemap: true
+    },
 };
